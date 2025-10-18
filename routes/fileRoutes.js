@@ -57,7 +57,6 @@ const router = express.Router();
 const ṭemostorage = multer.memoryStorage();
 const upload = multer({ ṭemostorage });
 
-// Upload route
 router.post("/file/upload", upload.single("file"), fileUpload);
 router.get("/file/download", download);
 router.get("/file/getStorage", getStorage);
