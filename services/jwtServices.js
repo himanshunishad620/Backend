@@ -5,6 +5,11 @@ const generateToken = (payload) => {
     expiresIn: "1d",
   });
 };
+const generateTempToken = (email) => {
+  return sign({ email }, process.env.SECRET_KEY, {
+    expiresIn: "5m",
+  });
+};
 // const verifyToken = (token) => {
 //   const decoded = verify(token, process.env.SECRET_KEY);
 //   return decoded;
@@ -18,8 +23,9 @@ const verifyToken = (token) => {
     const decoded = verify(token, process.env.SECRET_KEY);
     return decoded;
   } catch (err) {
-    throw new Error("Invalid JWT");
+    return null;
+    // throw new Error("Invalid JWT");
   }
 };
 
-module.exports = { generateToken, verifyToken };
+module.exports = { generateToken, generateTempToken, verifyToken };

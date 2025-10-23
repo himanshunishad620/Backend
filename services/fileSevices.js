@@ -14,7 +14,6 @@ const categorizeFile = (file) => {
 };
 
 const getCategoryUpdate = (fileType, fileSize, inc) => {
-  //   const category = getFileCategory(fileType); // Your categorization function
   const newFileSize = inc ? fileSize : -1 * fileSize;
   const newNoOfFiles = inc ? 1 : -1;
   return {

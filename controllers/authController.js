@@ -1,6 +1,10 @@
 const User = require("../models/userModel");
 const UserStorage = require("../models/userStorageModel");
-const { generateToken, verifyToken } = require("../services/jwtServices");
+const {
+  generateToken,
+  verifyToken,
+  generateTempToken,
+} = require("../services/jwtServices");
 const sendEmail = require("../services/mailServices");
 const { storeOTP, verifyOTP } = require("../services/otpServices");
 
@@ -69,6 +73,49 @@ exports.verifyToken = (req, res) => {
     res.status(200).json({ message: "Token verified", decoded });
   } catch (err) {
     res.status(404).json({ message: "Invalid token" });
+  }
+};
+
+exports.forgotPassword = async (req, res) => {
+  const { email } = req.body;
+  const user = await User.findOne({ email });
+  if (!user) return res.status(404).json({ msg: "User not found!" });
+  try {
+    const token = generateTempToken(email);
+    await sendEmail(
+      email,
+      "Reset Password Link ",
+      "Password Reset Link https://backend-u36p.onrender.com/auth/resetPassword?token=" +
+        token
+    );
+    res.status(200).json({ success: true, msg: "Link sent successfully!" });
+  } catch (error) {
+    res.status(500).json({ success: false, msg: "Internal server error!" });
+  }
+};
+
+exports.resetPassword = async (req, res) => {
+  const { token, password } = req.body;
+  if (!token) return res.status(404).json({ msg: "Token not found!" });
+  const decoded = verifyToken(token);
+  if (!decoded) return res.status(404).json({ msg: "Invalid token!" });
+  const email = decoded.email;
+  // const res = await User.updateOne({ email }, { $set: { password } });
+  // console.log(user);
+  try {
+    const response = await User.updateOne({ email }, { $set: { password } });
+    console.log(response);
+    await sendEmail(
+      email,
+      "Password Changed Successfully! ",
+      "You password has changed successfully!"
+    );
+    res
+      .status(200)
+      .json({ success: true, msg: "Password reset successfully!" });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ success: false, msg: "Internal server error!" });
   }
 };
 
