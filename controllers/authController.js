@@ -85,7 +85,7 @@ exports.forgotPassword = async (req, res) => {
     await sendEmail(
       email,
       "Reset Password Link ",
-      "Password Reset Link https://projectdrivex.netlify.com/auth/resetPassword?token=" +
+      "Password Reset Link https://projectdrivex.netlify.app/auth/resetPassword?token=" +
         token
     );
     res.status(200).json({ success: true, msg: "Link sent successfully!" });
