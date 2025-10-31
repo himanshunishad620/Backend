@@ -1,4 +1,5 @@
 const User = require("../models/userModel");
+require("dotenv").config();
 const UserStorage = require("../models/userStorageModel");
 const {
   generateToken,
@@ -79,7 +80,7 @@ exports.forgotPassword = async (req, res) => {
     await sendEmail(
       email,
       "Reset Password Link ",
-      `Password Reset Link https://projectdrivex.netlify.app/auth/resetPassword?token=${token}`
+      `Password Reset Link ${process.env.FRONTEND_URL}/auth/resetPassword?token=${token}`
     );
     res.status(200).json({ success: true, msg: "Link sent successfully!" });
   } catch (error) {

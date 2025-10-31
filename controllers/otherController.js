@@ -1,10 +1,10 @@
 const sendEmail = require("../services/mailServices");
-
+require("dotenv").config();
 exports.contact = async (req, res) => {
   const { message, email, firstName, lastName } = req.body;
   try {
     await sendEmail(
-      "himanshunishad620@gmail.com",
+      process.env.EMAIL_USER,
       "You have a new feedback",
       `By:${firstName} ${lastName}
        email:${email}
