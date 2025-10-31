@@ -79,7 +79,6 @@ exports.getStorage = async (req, res) => {
       result,
       local: now.toLocaleString("en-IN", {
         timeZone: "Asia/Kolkata",
-
         hour: "numeric",
         minute: "numeric",
         hour12: true,
