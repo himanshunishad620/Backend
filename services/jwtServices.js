@@ -10,10 +10,6 @@ const generateTempToken = (email) => {
     expiresIn: "5m",
   });
 };
-// const verifyToken = (token) => {
-//   const decoded = verify(token, process.env.SECRET_KEY);
-//   return decoded;
-// };
 const verifyToken = (token) => {
   if (!token) {
     throw new Error("JWT must be provided");
@@ -24,7 +20,6 @@ const verifyToken = (token) => {
     return decoded;
   } catch (err) {
     return null;
-    // throw new Error("Invalid JWT");
   }
 };
 

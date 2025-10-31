@@ -4,40 +4,40 @@ const fileSchema = new mongoose.Schema(
   {
     name: {
       type: String,
-      required: true, // file must have a name
+      required: true,
       trim: true,
     },
     size: {
       type: Number,
-      required: true, // must store size
+      required: true,
     },
     downloadUrl: {
       type: String,
-      required: true, // unique id for download
-      unique: true, // ensures no duplicate downloadIds
+      required: true,
+      unique: true,
     },
     fileType: {
       type: String,
-      required: true, // must store type (pdf, image, etc.)
+      required: true,
     },
     publicId: {
       type: String,
       required: true,
     },
   },
-  { timestamps: true } // adds createdAt & updatedAt automatically
+  { timestamps: true }
 );
 
 const recentUploadSchema = new mongoose.Schema(
   {
     name: {
       type: String,
-      required: true, // file must have a name
+      required: true,
       trim: true,
     },
     fileType: {
       type: String,
-      required: true, // must store type (pdf, image, etc.)
+      required: true,
     },
   },
   { timestamps: true, _id: false }
