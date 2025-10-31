@@ -22,7 +22,6 @@ exports.generateOtp = async (req, res) => {
     await sendEmail(email, "Your Register OTP", `Your OTP is ${otp}`);
     res.status(200).json({ success: true, msg: "OTP sent successfully!", otp });
   } catch (error) {
-    console.log(error);
     res.status(500).json({ success: false, msg: "Internal server error!" });
   }
 };
@@ -34,20 +33,16 @@ exports.register = async (req, res) => {
 
   try {
     const result = await User.insertOne({ email, password });
-    const response = await UserStorage.insertOne({ userId: result._id });
-    console.log(response);
+    await UserStorage.insertOne({ userId: result._id });
     res.status(200).json({ msg: "Registered Successfully!", result });
   } catch (err) {
-    console.log(err);
     res.status(404).json({ msg: "Something went wrong!" });
   }
 };
 
 exports.login = async (req, res) => {
   const { email, password } = req.body;
-  // console.log(email, password);
   const user = await User.findOne({ email });
-  // console.log(user);
   const isMatch = user?.password === password;
   if (!user || !isMatch)
     return res.status(404).json({ msg: "Invalid Credentials!" });
@@ -65,7 +60,6 @@ exports.login = async (req, res) => {
 
 exports.verifyToken = (req, res) => {
   const token = req.cookies.token;
-  // console.log(token);
 
   if (!token) return res.status(401).json({ message: "No token found" });
   try {
@@ -85,8 +79,7 @@ exports.forgotPassword = async (req, res) => {
     await sendEmail(
       email,
       "Reset Password Link ",
-      "Password Reset Link https://projectdrivex.netlify.app/auth/resetPassword?token=" +
-        token
+      `Password Reset Link https://projectdrivex.netlify.app/auth/resetPassword?token=${token}`
     );
     res.status(200).json({ success: true, msg: "Link sent successfully!" });
   } catch (error) {
@@ -100,11 +93,8 @@ exports.resetPassword = async (req, res) => {
   const decoded = verifyToken(token);
   if (!decoded) return res.status(404).json({ msg: "Invalid token!" });
   const email = decoded.email;
-  // const res = await User.updateOne({ email }, { $set: { password } });
-  // console.log(user);
   try {
     const response = await User.updateOne({ email }, { $set: { password } });
-    console.log(response);
     await sendEmail(
       email,
       "Password Changed Successfully! ",
@@ -114,7 +104,6 @@ exports.resetPassword = async (req, res) => {
       .status(200)
       .json({ success: true, msg: "Password reset successfully!" });
   } catch (error) {
-    console.log(error);
     res.status(500).json({ success: false, msg: "Internal server error!" });
   }
 };

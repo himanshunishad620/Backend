@@ -9,11 +9,7 @@ const app = express();
 app.use(express.json());
 app.use(
   cors({
-    origin: [
-      "http://localhost:5173",
-      "https://drive-x-frontend-smoky.vercel.app",
-      "https://projectdrivex.netlify.app",
-    ],
+    origin: ["http://localhost:5173", "https://projectdrivex.netlify.app"],
     credentials: true,
   })
 );
