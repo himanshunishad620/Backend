@@ -1,32 +1,23 @@
-const Mailjet = require("node-mailjet");
+const nodemailer = require("nodemailer");
 require("dotenv").config();
 
-const mailjet = Mailjet.apiConnect(
-  process.env.MAILJET_API_KEY,
-  process.env.MAILJET_SECRET_KEY,
-);
+const transporter = nodemailer.createTransport({
+  service: "gmail",
+  auth: {
+    user: process.env.EMAIL_USER,
+    pass: process.env.EMAIL_PASS,
+  },
+});
 
-const sendEmail = async ({ to, subject, text }) => {
+const sendEmail = async (to, subject, text) => {
   try {
-    await mailjet.post("send", { version: "v3.1" }).request({
-      Messages: [
-        {
-          From: {
-            Email: process.env.EMAIL_USER,
-            Name: "DriveX",
-          },
-          To: [
-            {
-              Email: to,
-            },
-          ],
-          Subject: subject,
-          HTMLPart: text,
-        },
-      ],
+    await transporter.sendMail({
+      to,
+      subject,
+      text,
     });
   } catch (error) {
-    console.error("Mail Error:", error);
+    console.log(error);
   }
 };
 
